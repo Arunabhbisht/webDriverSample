@@ -1,5 +1,6 @@
 # webDriverSample
-token: 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
+token: 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\
+toke-2: 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
 
 package GooglePageTest;
 
