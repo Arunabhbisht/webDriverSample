@@ -1,12 +1,11 @@
 package GooglePageTest;
-
-import java.util.List;
-
-import org.openqa.selenium.By; import org.openqa.selenium.Keys; import org.openqa.selenium.WebDriver; import org.openqa.selenium.WebElement; import org.openqa.selenium.chrome.ChromeDriver; import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.By; import org.openqa.selenium.Keys; import org.openqa.selenium.WebDriver; import org.openqa.selenium.WebElement; import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 
 public class GooglePageTest {
 
-public static void main(String[] args){
+public static void main(String[] args) throws InterruptedException {
 WebDriver driver=new ChromeDriver(); driver.manage().window().maximize(); driver.manage().deleteAllCookies();
 
 // driver.get("https://www.google.com/"); // WebElement srcBox= driver.findElement(By.id("APjFqb")); // srcBox.sendKeys("java tutorial"); // srcBox.sendKeys(Keys.ENTER); // System.out.println("title "+ driver.getTitle()); // System.out.println("URL "+ driver.getCurrentUrl()); // driver.get("https://www.google.com/"); // WebElement srcBox= driver.findElement(By.id("APjFqb")); // srcBox.sendKeys("java tutorial"); // Thread.sleep(2000); // List listItems= driver.findElements(By.xpath("//ul[@role='listbox']//li//descendant::div[@class='pcTkSc']")); // System.out.println("total items : " + listItems.size()); // for(int i=0;i<listItems.size();i++) { // System.out.println(listItems.get(i).getText()); // if(listItems.get(i).getText().equalsIgnoreCase("java tutorial pdf")) { // listItems.get(i).click(); // break;
@@ -18,8 +17,15 @@ WebDriver driver=new ChromeDriver(); driver.manage().window().maximize(); driver
 // //ChkRadiotest // driver.get("https://demo.seleniumeasy.com/basic-checkbox-demo.html"); // WebElement age =driver.findElement(By.id("isAgeSelected")); // if(!age.isSelected()) { // age.click(); // // } // driver.findElement(By.xpath("(//input[@class='cb1-element'])[2]")).click(); // //Radiobutton // driver.get("https://demo.seleniumeasy.com/basic-radiobutton-demo.html"); // driver.findElement(By.xpath("//input[@value= '5 - 15']")).click(); //
 
 //Dropdowntest driver.get("https://demo.seleniumeasy.com/basic-select-dropdown-demo.html"); Select singlSel= new Select(driver.findElement(By.id("select-demo"))); singlSel .selectByValue("Tuesday"); Select multiSel= new Select(driver.findElement(By.id("multi-select"))); if(multiSel.isMultiple()) { multiSel.selectByIndex(0); multiSel.selectByValue("Florida"); multiSel.selectByVisibleText("Washington");
+//mouseAction
 
+Actions action=new Actions(driver);
+
+driver.get("https://stqatools.com/demo/DoubleClick.php");
+Thread.sleep(1000);
+WebElement btn= driver.findElement(By.xpath("//button[text()'Click Me/ Double Click Me']"));
+action.doubleClick(btn).perform();
+//action.doubleClick(btn)..doubleClick(btn).perform();
 }
 
-}
 }
