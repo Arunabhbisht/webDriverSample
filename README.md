@@ -106,3 +106,215 @@ if(multiSel.isMultiple()) {
  }
 
 
+base
+
+package base;
+
+import java.time.Duration;
+import java.util.Properties;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+
+public class TestBase {
+	private static TestBase testBase;
+	private static WebDriver driver;
+	private static Properties properties;
+	
+	private TestBase()
+	{
+		String strbrowser= "chrome";
+		if (strbrowser.equalsIgnoreCase("chrome"))
+				{
+				driver =new ChromeDriver();
+				
+				}
+		else if (strbrowser.equalsIgnoreCase("edge")){
+			driver =new EdgeDriver();
+		}
+		
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		driver.manage().deleteAllCookies();
+	}
+	public static void initDriver() {
+		if (testBase==null){
+			testBase=new TestBase();
+			
+		}
+			}
+	
+	public static WebDriver getDriver() {
+		return driver;
+		
+	}
+	public static void openurl(String url) {
+		driver.get(url);
+	
+	}
+	public static void teardown() {
+	if (driver!=null) {
+		driver.close();
+		driver.quit();
+		
+	}
+		testBase=null;
+		
+	
+	}
+
+}
+
+
+
+
+pages
+package pages;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class loginPage {
+	
+	
+	@FindBy(id="username")
+	WebElement userId;
+	
+	@FindBy(id="password")
+	WebElement pwd;
+	
+	@FindBy(id="login-button")
+	WebElement lgnBtn;
+	
+	public loginPage (WebDriver driver) {
+		PageFactory.initElements(driver, this);
+		
+	}
+	public void loginIntoApp(String strUser, String strPwd) {
+		
+	userId.sendKeys(strUser);
+	pwd.sendKeys(strPwd);
+	lgnBtn.click();
+}
+}
+
+
+
+package pages;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class ProductListPage {
+	
+	@FindBy(id="add-to-cart-sauce-labs-backpack")
+	WebElement itemOne;
+	
+	@FindBy(id="add-to-cart-sauce-labs-bike-light")
+	WebElement itemTwo;
+
+	@FindBy(id="shopping_cart_contianer")
+	WebElement cartIcon;
+	
+	@FindBy(xpath="//span[contains(text(), 'Products')]")
+	WebElement productsTitle;
+	
+	//Action
+	public ProductListPage(WebDriver driver) {
+		PageFactory.initElements(driver, this);
+	}
+	
+	public void addToCart() {
+		itemOne.click();
+		itemTwo.click();
+		
+	}
+	public void viewCart() {
+		cartIcon.click();
+	}
+	
+	public boolean isonProducts() {
+		return productsTitle.isDisplayed();
+		
+	}
+
+}
+
+
+package testScripts;
+
+import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
+import org.testng.annotations.BeforeTest;
+
+import base.TestBase;
+import junit.framework.Test;
+import pages.loginPage;
+
+/**
+ * @author Administrator
+ *
+ */
+public class PlaceOrderTest {
+
+	WebDriver driver;
+	loginPage loginpage;
+	listpage ProductListPage;
+	
+	public PlaceOrderTest() {
+		TestBase.initDriver();
+		driver=TestBase.getDriver();
+		loginpage= new loginPage(driver);
+		listpage=new ProductListPage(driver);
+	}
+	@BeforeTest
+	public void setup() {
+		TestBase.openurl("https://www.saucedemo.com/");
+		loginpage.loginIntoApp("standard_user", "secret_sauce");
+		
+		
+	}
+	
+	public void validLogin(){
+		Assert.assertTrue(listpage.isonProducts());
+	}
+	
+	public void addItem()
+	
+	
+}
+
+pom <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>POMDemo</groupId>
+  <artifactId>POMDemo</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  
+  <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+<dependencies>
+<dependency>
+    <groupId>org.seleniumhq.selenium</groupId>
+    <artifactId>selenium-java</artifactId>
+    <version>4.15.0</version>
+</dependency>
+  <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.14.0</version>
+</dependency>
+  <!-- https://mvnrepository.com/artifact/org.testng/testng -->
+<dependency>
+    <groupId>org.testng</groupId>
+    <artifactId>testng</artifactId>
+    <version>7.8.0</version>
+    <scope>test</scope>
+</dependency>
+   </dependencies>
+</project>
+
